@@ -1,12 +1,13 @@
 {
   "name": "electron_vue_demo",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "author": "",
   "description": "An electron-vue project",
   "license": "MIT",
   "main": "./dist/electron/main.js",
   "scripts": {
     "build": "node .electron-vue/build.js && electron-builder",
+    "build:ci": "node .electron-vue/build.js && electron-builder --publish always",
     "build:dir": "node .electron-vue/build.js && electron-builder --dir",
     "build:clean": "cross-env BUILD_TARGET=clean node .electron-vue/build.js",
     "build:web": "cross-env BUILD_TARGET=web node .electron-vue/build.js",
