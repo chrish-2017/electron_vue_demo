@@ -1,7 +1,10 @@
 <template>
   <div class="wrapper">
     <img class="img-responsive" :src="bg">
-    <Button class="btn-bottom" type="primary" @click="goTodo">新建待办</Button>
+    <div class="btn-bottom">
+      <Button type="primary" @click="goTodo">新建待办</Button>
+      <Button type="primary" @click="goUpdate">更新应用</Button>
+    </div>
   </div>
 </template>
 
@@ -15,6 +18,9 @@ export default {
   methods: {
     goTodo () {
       this.$router.push('/todo')
+    },
+    goUpdate () {
+      this.$router.push('/update')
     }
   }
 }
@@ -28,7 +34,7 @@ export default {
     width: 100%;
   }
   .btn-bottom {
-    width: 100px;
+    width: 170px;
     position: absolute;
     left: 50%;
     bottom: 20%;

@@ -1,6 +1,7 @@
 'use strict'
 
-import { app, BrowserWindow } from 'electron'
+import { app, BrowserWindow, ipcMain } from 'electron'
+import { autoUpdater } from 'electron-updater'
 
 /**
  * Set `__static` path to static files in production
@@ -54,14 +55,44 @@ app.on('activate', () => {
  * https://simulatedgreg.gitbooks.io/electron-vue/content/en/using-electron-builder.html#auto-updating
  */
 
-/*
-import { autoUpdater } from 'electron-updater'
+autoUpdater.autoDownload = false
+autoUpdater.autoInstallOnAppQuit = false
 
-autoUpdater.on('update-downloaded', () => {
-  autoUpdater.quitAndInstall()
+ipcMain.on('checkForUpdates', () => {
+  autoUpdater.checkForUpdatesAndNotify()
 })
 
-app.on('ready', () => {
-  if (process.env.NODE_ENV === 'production') autoUpdater.checkForUpdates()
+ipcMain.on('downloadUpdate', () => {
+  autoUpdater.downloadUpdate()
 })
- */
+
+autoUpdater.on('error', data => {
+  sendUpdateMessage('error', data)
+})
+
+autoUpdater.on('checking-for-update', data => {
+  sendUpdateMessage('checking-for-update', data)
+})
+
+autoUpdater.on('update-available', data => {
+  sendUpdateMessage('update-available', data)
+})
+
+autoUpdater.on('update-not-available', data => {
+  sendUpdateMessage('update-not-available', data)
+})
+
+autoUpdater.on('download-progress', data => {
+  sendUpdateMessage('download-progress', data)
+})
+
+autoUpdater.on('update-downloaded', data => {
+  sendUpdateMessage('update-downloaded', data)
+  ipcMain.on('installNow', () => {
+    autoUpdater.quitAndInstall()
+  })
+})
+
+function sendUpdateMessage (message, data) {
+  mainWindow.webContents.send('update-message', { message, data })
+}

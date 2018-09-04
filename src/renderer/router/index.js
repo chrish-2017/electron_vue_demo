@@ -23,6 +23,11 @@ export default new Router({
       path: '/todo',
       name: 'todo-page',
       component: require('@/page/todo').default
+    },
+    {
+      path: '/update',
+      name: 'update-page',
+      component: require('@/page/update').default
     }
   ]
 })
